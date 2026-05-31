@@ -1,0 +1,5 @@
+# External Python packages required for Snake by Mils3x3
+# Python standard library modules used by the project include:
+# turtle, tkinter, pathlib, threading, random, time, and sys
+
+pygame
