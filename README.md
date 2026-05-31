@@ -147,7 +147,7 @@ pygame
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/snake-by-mils3x3.git
+git clone https://github.com/mils3x3/snake-by-mils3x3.git
 cd snake-by-mils3x3
 ```
 
@@ -197,10 +197,12 @@ Audio and media assets included in this repository are not licensed for reuse, r
 
 ## Screenshots
 
-Add a screenshot to the `screenshots/` folder and update the image path below if needed:
-
-```md
 ![Snake by Mils3x3 screenshot](screenshots/snake-game.png)
+
+Make sure the screenshot file is stored in the repository at:
+
+```text
+screenshots/snake-game.png
 ```
 
 ---
