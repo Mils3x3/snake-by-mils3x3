@@ -197,7 +197,7 @@ Audio and media assets included in this repository are not licensed for reuse, r
 
 ## Screenshots
 
-![Snake by Mils3x3 screenshot](screenshots/snake-game-demo.gif)
+![Snake by Mils3x3 gameplay demo](screenshots/snake-game-demo.gif)
 
 Make sure the screenshot file is stored in the repository at:
 
