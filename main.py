@@ -41,8 +41,7 @@ while again:
     my_screen.bgcolor("black")
 
     play_tracks()
-    music_tracks1 = [music3, music4, music5, music6]
-    music_tracks2 = [music7, music8, music9, music10]
+    music1.set_volume(0.75)
     music_start_time = time.perf_counter()
     music_loop_length = music1.get_length()
     
@@ -157,72 +156,56 @@ while again:
                 if level.flash2:
                     level.flash2 = level.flash_2()
                     SPEED *= SETUP.SPEED_UP
-                    random_track = random.randrange(len(music_tracks2))
-                    chosen_track = music_tracks2.pop(random_track)
-                    fade_in(chosen_track, target_volume=1, duration=2)
+                    fade_in(music3, target_volume=1, duration=2)
                 time.sleep(SPEED)
             elif 30 <= score_board.score < 40:
                 level.level = 4
                 if level.flash1:
                     level.flash1 = level.flash_1()
                     SPEED *= SETUP.SPEED_UP
-                    random_track = random.randrange(len(music_tracks1))
-                    chosen_track = music_tracks1.pop(random_track)
-                    fade_in(chosen_track, target_volume=1, duration=2)
+                    fade_in(music4, target_volume=1, duration=2)
                 time.sleep(SPEED)
             elif 40 <= score_board.score < 50:
                 level.level = 5
                 if level.flash2:
                     level.flash2 = level.flash_2()
                     SPEED *= SETUP.SPEED_UP
-                    random_track = random.randrange(len(music_tracks2))
-                    chosen_track = music_tracks2.pop(random_track)
-                    fade_in(chosen_track, target_volume=1, duration=2)
+                    fade_in(music5, target_volume=1, duration=2)
                 time.sleep(SPEED)
             elif 50 <= score_board.score < 60:
                 level.level = 6
                 if level.flash1:
                     level.flash1 = level.flash_1()
                     SPEED *= SETUP.SPEED_UP
-                    random_track = random.randrange(len(music_tracks1))
-                    chosen_track = music_tracks1.pop(random_track)
-                    fade_in(chosen_track, target_volume=1, duration=2)
+                    fade_in(music6, target_volume=1, duration=2)
                 time.sleep(SPEED)
             elif 60 <= score_board.score < 70:
                 level.level = 7
                 if level.flash2:
                     level.flash2 = level.flash_2()
                     SPEED *= SETUP.SPEED_UP
-                    random_track = random.randrange(len(music_tracks2))
-                    chosen_track = music_tracks2.pop(random_track)
-                    fade_in(chosen_track, target_volume=1, duration=2)
+                    fade_in(music7, target_volume=1, duration=2)
                 time.sleep(SPEED)
             elif 70 <= score_board.score < 80:
                 level.level = 8
                 if level.flash1:
                     level.flash1 = level.flash_1()
                     SPEED *= SETUP.SPEED_UP
-                    random_track = random.randrange(len(music_tracks1))
-                    chosen_track = music_tracks1.pop(random_track)
-                    fade_in(chosen_track, target_volume=1, duration=2)
+                    fade_in(music8, target_volume=1, duration=2)
                 time.sleep(SPEED)
             elif 80 <= score_board.score < 90:
                 level.level = 9
                 if level.flash2:
                     level.flash2 = level.flash_2()
                     SPEED *= SETUP.SPEED_UP
-                    random_track = random.randrange(len(music_tracks2))
-                    chosen_track = music_tracks2.pop(random_track)
-                    fade_in(chosen_track, target_volume=1, duration=2)
+                    fade_in(music9, target_volume=1, duration=2)
                 time.sleep(SPEED)
-            elif 90 <= score_board.score:
+            elif 90 <= score_board.score < 100:
                 level.level = 10
                 if level.flash1:
                     level.flash1 = level.flash_1()
                     SPEED *= SETUP.SPEED_UP
-                    random_track = random.randrange(len(music_tracks1))
-                    chosen_track = music_tracks1.pop(random_track)
-                    fade_in(chosen_track, target_volume=1, duration=2)
+                    fade_in(music10, target_volume=1, duration=2)
                 time.sleep(SPEED)
 
             snake.body[-1].forward(SETUP.MOVE_DISTANCE)
