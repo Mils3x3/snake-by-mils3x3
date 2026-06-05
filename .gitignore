@@ -1,0 +1,53 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Build / packaging output
+build/
+dist/
+*.spec
+
+# PyInstaller temporary files
+*.manifest
+*.pyz
+
+# Executables / installers / release packages
+*.exe
+*.msi
+*.app
+*.dmg
+
+# Archives / compressed files
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+*.gz
+
+# IDE / editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local environment files
+.env
+.env.*
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
