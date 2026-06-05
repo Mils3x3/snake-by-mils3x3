@@ -55,6 +55,7 @@ The main goal of this project is to demonstrate practical Python programming ski
 - Replay support after game over
 - Resource path handling for normal Python runs and PyInstaller builds
 - Clean exit handling for the Windows executable version
+- Keyboard control with both arrow keys and W, A, S, D support
 
 ---
 
@@ -62,10 +63,8 @@ The main goal of this project is to demonstrate practical Python programming ski
 
 | Key | Action |
 | --- | --- |
-| Up Arrow | Move up |
-| Down Arrow | Move down |
-| Left Arrow | Move left |
-| Right Arrow | Move right |
+| Arrow keys | Move the snake |
+| W, A, S, D | Move the snake |
 
 ---
 
