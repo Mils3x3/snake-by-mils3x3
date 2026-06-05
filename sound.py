@@ -117,6 +117,8 @@ big_bite1 = pygame.mixer.Sound(sound_path("big_bite1.ogg"))
 big_bite2 = pygame.mixer.Sound(sound_path("big_bite2.ogg"))
 big_bite3 = pygame.mixer.Sound(sound_path("big_bite3.ogg"))
 
+crash_sound = pygame.mixer.Sound(sound_path("crash.ogg"))
+
 end1 = pygame.mixer.Sound(sound_path("end1.ogg"))
 end2 = pygame.mixer.Sound(sound_path("end2.ogg"))
 end3 = pygame.mixer.Sound(sound_path("end3.ogg"))
@@ -142,5 +144,4 @@ end22 = pygame.mixer.Sound(sound_path("end22.ogg"))
 end23 = pygame.mixer.Sound(sound_path("end23.ogg"))
 end24 = pygame.mixer.Sound(sound_path("end24.ogg"))
 end25 = pygame.mixer.Sound(sound_path("end25.ogg"))
-end26 = pygame.mixer.Sound(sound_path("end26.ogg"))
-end_list = [end1, end2, end3, end4, end5, end6, end7, end8, end9, end10, end11, end12, end13, end14, end15, end16, end17, end18, end19, end20, end21, end22, end23, end24, end25, end26]
+end_list = [end1, end2, end3, end4, end5, end6, end7, end8, end9, end10, end11, end12, end13, end14, end15, end16, end17, end18, end19, end20, end21, end22, end23, end24, end25]

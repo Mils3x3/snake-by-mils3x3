@@ -4,6 +4,10 @@ class SnakeControl:
         self.can_turn = True
         self.queued_heading = None
 
+    def clear_control_state(self):
+        self.can_turn = True
+        self.queued_heading = None
+
     def turn(self, new_heading, opposite_heading):
         current_heading = self.snake_body[-1].heading()
 

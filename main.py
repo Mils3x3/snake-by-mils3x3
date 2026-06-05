@@ -1,23 +1,52 @@
 import time
-import tkinter as tk
-from turtle import Screen, Turtle
+import os
+import pygame
+import random
+import turtle
+from turtle import Screen
 from settings import DefaultSetup
-from score import ScoreBoard
-from control import SnakeControl
 from snake import SnakeBody
 from apple import Apple
 from level import Levels
+from colors import Colors
+from control import SnakeControl
+from score import ScoreBoard
 from countdown import CountDown
 from border import draw_border
+from window import choose_language, ready_to_play, ask_play_again
 from sound import *
-from window import ready_to_play, ask_play_again
-import random
+from difficulty import Difficulty
+from lives import Lives, CrashMessage
+from language import Text
+from app_helpers import close_game_window, show_main_menu
+from game_helpers import (
+    save_snake_positions,
+    restore_snake_positions,
+    wait_for_safe_direction,
+    get_safe_headings
+)
+
 
 ICON_PATH = resource_path("icon.ico")
 SETUP = DefaultSetup()
 
+original_turtle_root_init = turtle._Root.__init__
+
+def hidden_turtle_root_init(self):
+    original_turtle_root_init(self)
+    self.withdraw()
+
+turtle._Root.__init__ = hidden_turtle_root_init
+
 my_screen = Screen()
-my_screen.getcanvas().winfo_toplevel().iconbitmap(ICON_PATH)
+GAME_WINDOW = my_screen.getcanvas().winfo_toplevel()
+GAME_WINDOW.withdraw()
+
+GAME_WINDOW.iconbitmap(ICON_PATH)
+#GAME_WINDOW.resizable(False, False)
+
+GAME_WINDOW.protocol("WM_DELETE_WINDOW", close_game_window)
+
 SETUP.HEIGHT = SETUP.WIDTH
 WINDOW_MARGIN = 30
 
@@ -26,36 +55,75 @@ my_screen.setup(
     height=SETUP.HEIGHT + WINDOW_MARGIN * 2
 )
 
-my_screen.bgcolor("black")
-my_screen.title("Snake by Mils3x3")
-start = ready_to_play(ICON_PATH)
+my_screen.bgcolor(Colors.BACKGROUND)
+my_screen.title(Text.GAME_TITLE)
+my_screen.update()
 
-if not start:
-    my_screen.bye()
-    quit()
+GAME_WINDOW.deiconify()
+GAME_WINDOW.lift()
+GAME_WINDOW.focus_force()
+
+show_main_menu(my_screen)
 
 again = True
 while again:
     '''CREATE GAME'''
-    SPEED = 0.12
-    my_screen.bgcolor("black")
+    difficulty = Difficulty(my_screen)
+    SPEED = difficulty.choose()
 
-    play_tracks()
+    if SPEED == "back":
+        show_main_menu(my_screen)
+        continue
+
+    if SPEED is None:
+        close_game_window()
+        
+    my_screen.bgcolor(Colors.BACKGROUND)
+
     music1.set_volume(0.75)
-    music_start_time = time.perf_counter()
     music_loop_length = music1.get_length()
-    
-    draw_border(SETUP)
+
+    music_start_time_holder = [0]
+
+    def start_music_with_border():
+        play_tracks()
+        music_start_time_holder[0] = time.perf_counter()
+
+    draw_border(SETUP, start_music_with_border)
+
+    music_start_time = music_start_time_holder[0]
+
     my_screen.listen()
     my_screen.tracer(0)
+
     countdown = CountDown()
 
-    apple = Apple()
     score_board = ScoreBoard()
-    level = Levels()
+    lives = Lives()
+    level = Levels(my_screen)
+    crash_message = CrashMessage()
+
     snake = SnakeBody()
     snake.hideturtle()
+
+    apple = Apple()
+    apple.hideturtle()
+
+    '''START'''
+    score_board.clear_scores()
+    countdown.show_step(my_screen, "3")
+
+    lives.show_lives()
+    countdown.show_step(my_screen, "2")
+
+    level.level_clear()
+    countdown.show_step(my_screen, "1")
+
     snake.create_snake_body()
+    countdown.show_step(my_screen, Text.COUNTDOWN_START)
+
+    safe_positions = save_snake_positions(snake)
+    safe_heading = snake.body[-1].heading()
 
     '''KEYBOARD CONTROL'''
     snake_control = SnakeControl(snake.body)
@@ -65,11 +133,13 @@ while again:
     my_screen.onkeypress(snake_control.go_left, "Left")
     my_screen.onkeypress(snake_control.go_right, "Right")
 
-    '''START'''
+    my_screen.listen()
+
     apple_rand_x_cord, apple_rand_y_cord = apple.random_place()
     apple.goto(apple_rand_x_cord, apple_rand_y_cord)
-    countdown.countdown(my_screen)
-    countdown.hideturtle()
+    apple.showturtle()
+
+    my_screen.update()
 
     game_is_on = True
     while game_is_on:
@@ -87,35 +157,68 @@ while again:
         snake.body_y.pop(-1)
 
         '''OUT OF BORDER'''
-        if (snake_head_xcor > SETUP.WIDTH / 2 - SETUP.MOVE_DISTANCE or
-                snake_head_xcor < ((SETUP.WIDTH / 2) * - 1) + SETUP.MOVE_DISTANCE or
-                snake_head_ycor > SETUP.HEIGHT / 2 - SETUP.MOVE_DISTANCE or
-                snake_head_ycor < ((SETUP.HEIGHT / 2) * - 1) + SETUP.MOVE_DISTANCE):
-            game_is_on = False
-            stop_tracks()
-            random_end = random.choice(end_list)
-            random_end.play(0)
-            random_end.set_volume(0.7)
+        hit_wall = (
+            snake_head_xcor > SETUP.WIDTH / 2 - SETUP.MOVE_DISTANCE or
+            snake_head_xcor < ((SETUP.WIDTH / 2) * -1) + SETUP.MOVE_DISTANCE or
+            snake_head_ycor > SETUP.HEIGHT / 2 - SETUP.MOVE_DISTANCE or
+            snake_head_ycor < ((SETUP.HEIGHT / 2) * -1) + SETUP.MOVE_DISTANCE
+        )
 
-            for _ in range(2):
-                my_screen.bgcolor("red3")
-                time.sleep(0.4)
-                my_screen.bgcolor("red4")
-                time.sleep(0.4)
+        '''SNAKE COLLIDES WITH ITSELF'''
+        hit_itself = (snake_head_xcor, snake_head_ycor) in zip(snake.body_x, snake.body_y)
 
-            '''SNAKE COLLIDES WITH ITSELF'''
-        elif (snake_head_xcor, snake_head_ycor) in zip(snake.body_x, snake.body_y):
-            game_is_on = False
-            stop_tracks()
-            random_end = random.choice(end_list)
-            random_end.play(0)
-            random_end.set_volume(0.5)
+        if hit_wall or hit_itself:
+            snake.body_x.clear()
+            snake.body_y.clear()
 
-            for _ in range(2):
-                my_screen.bgcolor("red3")
-                time.sleep(0.4)
-                my_screen.bgcolor("red4")
-                time.sleep(0.4)
+            lives.lose_life()
+
+            if lives.lives == 0:
+                game_is_on = False
+                stop_tracks()
+
+                random_end = random.choice(end_list)
+                random_end.play(0)
+                random_end.set_volume(0.7)
+
+                for _ in range(2):
+                    my_screen.bgcolor(Colors.CRASH_LIGHT)
+                    time.sleep(0.4)
+                    my_screen.bgcolor(Colors.CRASH_DARK)
+                    time.sleep(0.4)
+
+            else:
+                restore_snake_positions(snake, safe_positions, safe_heading)
+
+                safe_headings = get_safe_headings(snake, SETUP)
+
+                if len(safe_headings) == 0:
+                    lives.lose_all_lives()
+                    game_is_on = False
+                    stop_tracks()
+
+                    random_end = random.choice(end_list)
+                    random_end.play(0)
+                    random_end.set_volume(0.7)
+
+                    for _ in range(2):
+                        my_screen.bgcolor(Colors.CRASH_LIGHT)
+                        time.sleep(0.4)
+                        my_screen.bgcolor(Colors.CRASH_DARK)
+                        time.sleep(0.4)
+
+                else:
+                    crash_message.show_waiting_message(safe_headings)
+                    level.flash_0()
+                    crash_sound.play()
+                    crash_sound.set_volume(0.15)
+                    my_screen.update()
+
+                    wait_for_safe_direction(my_screen, snake, snake_control, crash_message, safe_headings)
+
+                    my_screen.bgcolor(Colors.BACKGROUND)
+                    continue
+
 
         else:
             snake_body_x_backup = snake.body_x.copy()
@@ -208,6 +311,10 @@ while again:
                     fade_in(music10, target_volume=1, duration=2)
                 time.sleep(SPEED)
 
+            safe_positions = save_snake_positions(snake)
+            safe_heading = snake.body[-1].heading()
+
+            my_screen.update()
             snake.body[-1].forward(SETUP.MOVE_DISTANCE)
             snake.body[0].goto(snake_head_xcor, snake_head_ycor)
             last_pos = snake.body.pop(0)
@@ -215,7 +322,10 @@ while again:
 
             snake_control.reset_turn()
 
-    another_game = ask_play_again(ICON_PATH)
+    my_screen.bgcolor(Colors.BACKGROUND)
+    my_screen.update()
+
+    another_game = ask_play_again(my_screen)
 
     if another_game == "yes":
         for segment in snake.body:
@@ -224,9 +334,13 @@ while again:
         apple.hideturtle()
         score_board.hideturtle()
         level.hideturtle()
+        lives.hideturtle()
+        crash_message.hideturtle()
 
         my_screen.clearscreen()
+        my_screen.bgcolor(Colors.BACKGROUND)
+        my_screen.title(Text.GAME_TITLE)
+        my_screen.update()
 
     elif another_game == "no":
-        again = False
-        my_screen.bye()
+        close_game_window()

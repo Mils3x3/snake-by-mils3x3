@@ -1,30 +1,35 @@
-from turtle import Turtle
 import time
+from turtle import Turtle
+from language import Text
+from colors import Colors
+from fonts import Fonts
 
 
 class CountDown(Turtle):
     def __init__(self):
         super().__init__()
+        self.hideturtle()
+        self.penup()
+        self.color(Colors.TEXT_PRIMARY)
 
-    def countdown(self, my_screen):
-        for number in range(3, 0, -1):
-            for font_size in range(5, 60):
-                time.sleep(0.0058)
-                self.color("White")
-                self.shapesize(10)
-                self.hideturtle()
-                self.penup()
-                self.goto(x=0, y=-font_size + 80)
-                self.write(arg=number, align="center", font=('Arial', font_size, 'normal'), move=False)
-                my_screen.update()
-                self.reset()
-        for font_size in range(5, 60):
-            time.sleep(0.0058)
-            self.color("White")
-            self.shapesize(10)
-            self.hideturtle()
-            self.penup()
-            self.goto(x=0, y=-font_size + 80)
-            self.write(arg="Start", align="center", font=('Arial', font_size, 'normal'), move=False)
+    def show_countdown_text(self, text):
+        self.clear()
+        self.goto(0, 25)
+        self.write(
+            text,
+            align="center",
+            font=Fonts.COUNTDOWN
+        )
+
+    def wait_step(self, my_screen, duration=0.581):
+        end_time = time.perf_counter() + duration
+
+        while time.perf_counter() < end_time:
             my_screen.update()
-            self.reset()
+            time.sleep(0.01)
+
+    def show_step(self, my_screen, text, duration=0.581):
+        self.show_countdown_text(text)
+        self.wait_step(my_screen, duration)
+        self.clear()
+        my_screen.update()

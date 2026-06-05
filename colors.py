@@ -1,0 +1,36 @@
+class Colors:
+    BACKGROUND = "#000000"
+
+    BUTTON = "#22C55E"
+    BUTTON_HOVER = "#16A34A"
+    BUTTON_TEXT = "#000000"
+
+    EXIT_BUTTON = "#EF4444"
+    EXIT_BUTTON_HOVER = "#AA3636"
+
+    BACK_BUTTON = "#FACC15"
+    BACK_BUTTON_HOVER = "#DBA607"
+    BACK_BUTTON_TEXT = "#000000"
+
+    TEXT_PRIMARY = "#38BDF8"
+    TEXT_SECONDARY = "#9CA3AF"
+
+    APPLE = "#39FF14"
+
+    SNAKE_BODY = "#E5E7EB"
+    SNAKE_HEAD = "#000000"
+    SNAKE_HEAD_OUTLINE = "#EF4444"
+
+    SCORE = "#FACC15"
+    LEVEL = "#38BDF8"
+    LIVES = "#EF4444"
+
+    BORDER = "#4B5563"
+
+    CRASH_DARK = "#AA3636"
+    CRASH_LIGHT = "#EF4444"
+
+    FLASH_GREY = "#555555"
+
+'''Color Backup'''
+# Background Blue --> #111827

@@ -1,88 +1,328 @@
 import tkinter as tk
+import customtkinter as ctk
+from colors import Colors
+from language import Text, set_language
+from fonts import Fonts
 
 
-def ready_to_play(icon_path):
-    ready = False
-
-    def start_game():
-        nonlocal ready
-        ready = True
-        window.destroy()
-
-    def close_window():
-        nonlocal ready
-        ready = False
-        window.destroy()
-
-    window = tk.Toplevel()
-    window.iconbitmap(str(icon_path))
-    window.config(padx=15, pady=15)
-    window.title("")
-
-    window.protocol("WM_DELETE_WINDOW", close_window)
-    window.title("Snake by Mils3x3")
-
-    label = tk.Label(window, text="Are you ready to play?")
-    label.grid(row=0, column=0, columnspan=2)
-
-    start_button = tk.Button(window, text="Start!", width=16, command=start_game)
-    start_button.grid(row=1, column=0, padx=10, pady=10)
-
-    exit_button = tk.Button(window, text="Exit", width=16, command=close_window)
-    exit_button.grid(row=1, column=1, padx=10, pady=10)
-
-    window.update_idletasks()
-
-    width = window.winfo_width()
-    height = window.winfo_height()
-
-    x = (window.winfo_screenwidth() // 2) - (width // 2)
-    y = (window.winfo_screenheight() // 2) - (height // 2)
-
-    window.geometry(f"{width}x{height}+{x}+{y}")
-
-    window.wait_window()
-
-    return ready
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("green")
 
 
-def ask_play_again(icon_path):
+def create_menu_frame(my_screen):
+    canvas = my_screen.getcanvas()._canvas
+    canvas.update_idletasks()
+
+    width = 452
+    height = 452
+
+    frame = tk.Frame(
+        canvas,
+        width=width,
+        height=height,
+        bg=Colors.BACKGROUND,
+        highlightthickness=0,
+        bd=0
+    )
+
+    frame.pack_propagate(False)
+
+    window_id = canvas.create_window(
+        0,
+        0,
+        window=frame,
+        anchor="center"
+    )
+
+    def keep_centered(event=None):
+        if frame.winfo_exists():
+            canvas.coords(window_id, 0, 0)
+
+    canvas.bind("<Configure>", keep_centered, add="+")
+    keep_centered()
+
+    return canvas, frame, window_id
+
+
+def close_menu(canvas, frame, window_id, done_variable):
+    canvas.delete(window_id)
+    frame.destroy()
+    done_variable.set(True)
+
+
+def ready_to_play(my_screen):
+    selected_option = None
+    done = tk.BooleanVar(value=False)
+
+    canvas, frame, window_id = create_menu_frame(my_screen)
+
+    def play_game():
+        nonlocal selected_option
+        selected_option = "play"
+        close_menu(canvas, frame, window_id, done)
+
+    def change_language():
+        nonlocal selected_option
+        selected_option = "language"
+        close_menu(canvas, frame, window_id, done)
+
+    def exit_game():
+        nonlocal selected_option
+        selected_option = "exit"
+        close_menu(canvas, frame, window_id, done)
+
+    def show_help():
+        nonlocal selected_option
+        selected_option = "instructions"
+        close_menu(canvas, frame, window_id, done)
+
+    menu_content = ctk.CTkFrame(frame, fg_color="transparent")
+    menu_content.place(relx=0.5, rely=0.5, anchor="center")
+
+    label = ctk.CTkLabel(
+        menu_content,
+        text=Text.READY_QUESTION,
+        font=Fonts.MENU_LABEL,
+        text_color=Colors.TEXT_PRIMARY
+    )
+    label.pack(pady=(0, 18))
+
+    play_button = ctk.CTkButton(
+        menu_content,
+        text=Text.PLAY_BUTTON,
+        width=180,
+        height=35,
+        font=Fonts.MENU_BUTTON,
+        fg_color=Colors.BUTTON,
+        hover_color=Colors.BUTTON_HOVER,
+        text_color=Colors.BUTTON_TEXT,
+        command=play_game
+    )
+    play_button.pack(pady=5)
+
+    instructions_button = ctk.CTkButton(
+        menu_content,
+        text=Text.HOW_TO_PLAY_BUTTON,
+        width=180,
+        height=35,
+        font=Fonts.MENU_BUTTON,
+        fg_color=Colors.BUTTON,
+        hover_color=Colors.BUTTON_HOVER,
+        text_color=Colors.BUTTON_TEXT,
+        command=show_help
+    )
+    instructions_button.pack(pady=(5))
+
+    language_button = ctk.CTkButton(
+        menu_content,
+        text=Text.LANGUAGE_BUTTON,
+        width=180,
+        height=35,
+        font=Fonts.MENU_BUTTON,
+        fg_color=Colors.BUTTON,
+        hover_color=Colors.BUTTON_HOVER,
+        text_color=Colors.BUTTON_TEXT,
+        command=change_language
+    )
+    language_button.pack(pady=5)
+
+    exit_button = ctk.CTkButton(
+        menu_content,
+        text=Text.EXIT_BUTTON,
+        width=180,
+        height=35,
+        font=Fonts.MENU_BUTTON,
+        fg_color=Colors.EXIT_BUTTON,
+        hover_color=Colors.EXIT_BUTTON_HOVER,
+        text_color=Colors.BUTTON_TEXT,
+        command=exit_game
+    )
+    exit_button.pack(pady=5)
+
+    canvas.wait_variable(done)
+
+    return selected_option
+
+
+def choose_language(my_screen):
+    selected_language = None
+    done = tk.BooleanVar(value=False)
+
+    canvas, frame, window_id = create_menu_frame(my_screen)
+
+    def select_language(language_code):
+        nonlocal selected_language
+        selected_language = language_code
+        set_language(language_code)
+        close_menu(canvas, frame, window_id, done)
+
+    def go_back():
+        nonlocal selected_language
+        selected_language = "back"
+        close_menu(canvas, frame, window_id, done)
+
+    menu_content = ctk.CTkFrame(frame, fg_color="transparent")
+    menu_content.place(relx=0.5, rely=0.5, anchor="center")
+
+    label = ctk.CTkLabel(
+        menu_content,
+        text=Text.CHOOSE_LANGUAGE_LABEL,
+        font=Fonts.MENU_LABEL,
+        text_color=Colors.TEXT_PRIMARY
+    )
+    label.pack(pady=(0, 15))
+
+    english_button = ctk.CTkButton(
+        menu_content,
+        text=Text.ENGLISH_BUTTON,
+        width=180,
+        height=35,
+        font=Fonts.MENU_BUTTON,
+        fg_color=Colors.BUTTON,
+        hover_color=Colors.BUTTON_HOVER,
+        text_color=Colors.BUTTON_TEXT,
+        command=lambda: select_language("en")
+    )
+    english_button.pack(pady=5)
+
+    hungarian_button = ctk.CTkButton(
+        menu_content,
+        text=Text.HUNGARIAN_BUTTON,
+        width=180,
+        height=35,
+        font=Fonts.MENU_BUTTON,
+        fg_color=Colors.BUTTON,
+        hover_color=Colors.BUTTON_HOVER,
+        text_color=Colors.BUTTON_TEXT,
+        command=lambda: select_language("hu")
+    )
+    hungarian_button.pack(pady=5)
+
+    persian_button = ctk.CTkButton(
+        menu_content,
+        text=Text.PERSIAN_BUTTON,
+        width=180,
+        height=35,
+        font=Fonts.MENU_BUTTON,
+        fg_color=Colors.BUTTON,
+        hover_color=Colors.BUTTON_HOVER,
+        text_color=Colors.BUTTON_TEXT,
+        command=lambda: select_language("fa")
+    )
+    persian_button.pack(pady=5)
+
+    back_button = ctk.CTkButton(
+        menu_content,
+        text=Text.BACK_BUTTON,
+        width=140,
+        height=32,
+        font=Fonts.MENU_BUTTON,
+        fg_color=Colors.BACK_BUTTON,
+        hover_color=Colors.BACK_BUTTON_HOVER,
+        text_color=Colors.BACK_BUTTON_TEXT,
+        command=go_back
+    )
+    back_button.pack(pady=(18, 0))
+
+    canvas.wait_variable(done)
+
+    return selected_language
+
+
+def show_instructions(my_screen):
+    canvas, frame, window_id = create_menu_frame(my_screen)
+    done = tk.BooleanVar(value=False)
+
+    menu_content = ctk.CTkFrame(frame, fg_color="transparent")
+    menu_content.place(relx=0.5, rely=0.5, anchor="center")
+
+    title_label = ctk.CTkLabel(
+        menu_content,
+        text=Text.INSTRUCTIONS_TITLE,
+        font=Fonts.MENU_LABEL,
+        text_color=Colors.TEXT_PRIMARY
+    )
+    title_label.pack(pady=(0, 18))
+
+    instructions_label = ctk.CTkLabel(
+        menu_content,
+        text=Text.INSTRUCTIONS_TEXT,
+        font=Fonts.MENU_BUTTON,
+        text_color=Colors.TEXT_SECONDARY,
+        justify="left",
+        wraplength=360
+    )
+    instructions_label.pack(pady=(0, 22))
+
+    back_button = ctk.CTkButton(
+        menu_content,
+        text=Text.BACK_BUTTON,
+        width=160,
+        height=32,
+        font=Fonts.MENU_BUTTON,
+        fg_color=Colors.BACK_BUTTON,
+        hover_color=Colors.BACK_BUTTON_HOVER,
+        text_color=Colors.BACK_BUTTON_TEXT,
+        command=lambda: close_menu(canvas, frame, window_id, done)
+    )
+    back_button.pack()
+
+    my_screen.getcanvas().wait_variable(done)
+
+
+def ask_play_again(my_screen):
     answer = None
+    done = tk.BooleanVar(value=False)
+
+    canvas, frame, window_id = create_menu_frame(my_screen)
 
     def play_again():
         nonlocal answer
         answer = "yes"
-        window.destroy()
+        close_menu(canvas, frame, window_id, done)
 
     def exit_game():
         nonlocal answer
         answer = "no"
-        window.destroy()
+        close_menu(canvas, frame, window_id, done)
 
-    window = tk.Toplevel()
-    window.iconbitmap(str(icon_path))
-    window.config(padx=15, pady=15)
-    window.title("Snake by Mils3x3")
+    label = ctk.CTkLabel(
+        frame,
+        text=Text.PLAY_AGAIN_QUESTION,
+        font=Fonts.MENU_LABEL,
+        text_color=Colors.TEXT_PRIMARY
+    )
+    label.pack(pady=(175, 15))
 
-    label = tk.Label(window, text="Do you want to play again?")
-    label.grid(row=0, column=0, columnspan=2)
+    button_frame = ctk.CTkFrame(frame, fg_color="transparent")
+    button_frame.pack()
 
-    play_again_button = tk.Button(window, text="Play again", width=16, command=play_again)
-    play_again_button.grid(row=1, column=0, padx=10, pady=10)
+    play_again_button = ctk.CTkButton(
+        button_frame,
+        text=Text.PLAY_AGAIN_BUTTON,
+        height=25,
+        width=120,
+        font=Fonts.MENU_BUTTON,
+        fg_color=Colors.BUTTON,
+        hover_color=Colors.BUTTON_HOVER,
+        text_color=Colors.BUTTON_TEXT,
+        command=play_again
+    )
+    play_again_button.pack(side="left", padx=8)
 
-    exit_button = tk.Button(window, text="Exit", width=16, command=exit_game)
-    exit_button.grid(row=1, column=1, padx=10, pady=10)
+    exit_button = ctk.CTkButton(
+        button_frame,
+        text=Text.EXIT_BUTTON,
+        height=25,
+        width=120,
+        font=Fonts.MENU_BUTTON,
+        fg_color=Colors.EXIT_BUTTON,
+        hover_color=Colors.EXIT_BUTTON_HOVER,
+        text_color=Colors.BUTTON_TEXT,
+        command=exit_game
+    )
+    exit_button.pack(side="left", padx=8)
 
-    window.update_idletasks()
-
-    width = window.winfo_width()
-    height = window.winfo_height()
-
-    x = (window.winfo_screenwidth() // 2) - (width // 2)
-    y = (window.winfo_screenheight() // 2) - (height // 2)
-
-    window.geometry(f"{width}x{height}+{x}+{y}")
-
-    window.wait_window()
+    canvas.wait_variable(done)
 
     return answer

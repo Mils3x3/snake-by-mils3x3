@@ -1,4 +1,5 @@
 import random
+from colors import Colors
 from turtle import Turtle
 from settings import DefaultSetup
 
@@ -10,7 +11,7 @@ class Apple(Turtle):
     def __init__(self):
         super().__init__()
         self.penup()
-        self.color("green")
+        self.color(Colors.APPLE)
         self.shape("circle")
         self.shapesize(0.80)
         self.w_max_num_20 = int((SETUP.WIDTH / SETUP.MOVE_DISTANCE) - 1)
