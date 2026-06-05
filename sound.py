@@ -65,23 +65,23 @@ def bite_sounds(music_start_time, music_loop_length, score_board):
 
     if score_board.score % 10 == 0:
         if 0 <= loop_part < 0.25 or 0.50 <= loop_part < 0.75:
-            big_bite1.set_volume(0.6)
+            big_bite1.set_volume(0.4)
             big_bite1.play(0)
         elif 0.25 <= loop_part < 0.50:
-            big_bite2.set_volume(0.6)
+            big_bite2.set_volume(0.4)
             big_bite2.play(0)
         else:
-            big_bite3.set_volume(0.6)
+            big_bite3.set_volume(0.4)
             big_bite3.play(0)
     else:
         if 0 <= loop_part < 0.25 or 0.50 <= loop_part < 0.75:
-            small_bite1.set_volume(0.6)
+            small_bite1.set_volume(0.4)
             small_bite1.play(0)
         elif 0.25 <= loop_part < 0.50:
-            small_bite2.set_volume(0.6)
+            small_bite2.set_volume(0.4)
             small_bite2.play(0)
         else:
-            small_bite3.set_volume(0.6)
+            small_bite3.set_volume(0.4)
             small_bite3.play(0) 
 
 

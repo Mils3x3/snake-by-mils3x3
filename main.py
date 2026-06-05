@@ -133,6 +133,16 @@ while again:
     my_screen.onkeypress(snake_control.go_left, "Left")
     my_screen.onkeypress(snake_control.go_right, "Right")
 
+    my_screen.onkeypress(snake_control.go_up, "w")
+    my_screen.onkeypress(snake_control.go_down, "s")
+    my_screen.onkeypress(snake_control.go_left, "a")
+    my_screen.onkeypress(snake_control.go_right, "d")
+
+    my_screen.onkeypress(snake_control.go_up, "W")
+    my_screen.onkeypress(snake_control.go_down, "S")
+    my_screen.onkeypress(snake_control.go_left, "A")
+    my_screen.onkeypress(snake_control.go_right, "D")
+
     my_screen.listen()
 
     apple_rand_x_cord, apple_rand_y_cord = apple.random_place()

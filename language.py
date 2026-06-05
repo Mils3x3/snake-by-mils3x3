@@ -52,7 +52,7 @@ LANGUAGES = {
         "HOW_TO_PLAY_BUTTON": "How to play",
         "INSTRUCTIONS_TITLE": "How to play",
         "INSTRUCTIONS_TEXT": (
-            "Use the arrow keys to control the snake.\n\n"
+            "Use the arrow keys or W, A, S and D to control the snake.\n\n"
             "Eat apples to increase your score and level.\n\n"
             "The snake gets faster as you progress.\n\n"
             "You have 3 lives.\n"
@@ -113,7 +113,7 @@ LANGUAGES = {
         "HOW_TO_PLAY_BUTTON": "Játékszabály",
         "INSTRUCTIONS_TITLE": "Játékszabály",
         "INSTRUCTIONS_TEXT": (
-            "Irányítsd a kígyót a nyílbillentyűkkel.\n\n"
+            "Irányítsd a kígyót a nyílbillentyűkkel vagy a W, A, S és D billentyűkkel.\n\n"
             "Edd meg az almákat, hogy növeld a pontszámodat és a szintedet.\n\n"
             "Ahogy haladsz előre, a kígyó egyre gyorsabb lesz.\n\n"
             "3 életed van.\n"
@@ -174,7 +174,7 @@ LANGUAGES = {
         "HOW_TO_PLAY_BUTTON": "راهنمای بازی",
         "INSTRUCTIONS_TITLE": "راهنمای بازی",
         "INSTRUCTIONS_TEXT": (
-            "با کلیدهای جهت‌دار مار را کنترل کن.\n\n"
+            "با کلیدهای جهت‌دار یا کلیدهای W، A، S و D مار را کنترل کن.\n\n"
             "سیب‌ها را بخور تا امتیاز و مرحله‌ات بیشتر شود.\n\n"
             "با پیشرفت در بازی، سرعت مار بیشتر می‌شود.\n\n"
             "تو ۳ جان داری.\n"

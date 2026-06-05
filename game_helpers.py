@@ -26,6 +26,26 @@ def wait_for_safe_direction(my_screen, snake, snake_control, crash_message, safe
         my_screen.onkeyrelease(None, "Left")
         my_screen.onkeyrelease(None, "Right")
 
+        my_screen.onkeypress(None, "w")
+        my_screen.onkeypress(None, "s")
+        my_screen.onkeypress(None, "a")
+        my_screen.onkeypress(None, "d")
+
+        my_screen.onkeyrelease(None, "w")
+        my_screen.onkeyrelease(None, "s")
+        my_screen.onkeyrelease(None, "a")
+        my_screen.onkeyrelease(None, "d")
+
+        my_screen.onkeypress(None, "W")
+        my_screen.onkeypress(None, "S")
+        my_screen.onkeypress(None, "A")
+        my_screen.onkeypress(None, "D")
+
+        my_screen.onkeyrelease(None, "W")
+        my_screen.onkeyrelease(None, "S")
+        my_screen.onkeyrelease(None, "A")
+        my_screen.onkeyrelease(None, "D")
+
     def choose_heading(new_heading):
         nonlocal selected_heading
 
@@ -45,6 +65,16 @@ def wait_for_safe_direction(my_screen, snake, snake_control, crash_message, safe
     my_screen.onkeypress(lambda: choose_heading(180), "Left")
     my_screen.onkeypress(lambda: choose_heading(0), "Right")
 
+    my_screen.onkeypress(lambda: choose_heading(90), "w")
+    my_screen.onkeypress(lambda: choose_heading(270), "s")
+    my_screen.onkeypress(lambda: choose_heading(180), "a")
+    my_screen.onkeypress(lambda: choose_heading(0), "d")
+
+    my_screen.onkeypress(lambda: choose_heading(90), "W")
+    my_screen.onkeypress(lambda: choose_heading(270), "S")
+    my_screen.onkeypress(lambda: choose_heading(180), "A")
+    my_screen.onkeypress(lambda: choose_heading(0), "D")
+
     my_screen.listen()
 
     while selected_heading is None:
@@ -57,6 +87,16 @@ def wait_for_safe_direction(my_screen, snake, snake_control, crash_message, safe
     my_screen.onkeypress(snake_control.go_down, "Down")
     my_screen.onkeypress(snake_control.go_left, "Left")
     my_screen.onkeypress(snake_control.go_right, "Right")
+
+    my_screen.onkeypress(snake_control.go_up, "w")
+    my_screen.onkeypress(snake_control.go_down, "s")
+    my_screen.onkeypress(snake_control.go_left, "a")
+    my_screen.onkeypress(snake_control.go_right, "d")
+
+    my_screen.onkeypress(snake_control.go_up, "W")
+    my_screen.onkeypress(snake_control.go_down, "S")
+    my_screen.onkeypress(snake_control.go_left, "A")
+    my_screen.onkeypress(snake_control.go_right, "D")
 
     snake_control.clear_control_state()
     snake_control.can_turn = False
