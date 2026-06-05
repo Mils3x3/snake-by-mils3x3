@@ -1,49 +1,60 @@
 # Snake by Mils3x3
 
-A modular Python Snake game built with **Python Turtle**, **Tkinter**, and **Pygame**.
+A modular, multilingual Python Snake game built with **Python Turtle**, **CustomTkinter**, and **Pygame**.
 
-This project started as a classic Snake game and was expanded into a more complete portfolio project with level progression, collision detection, replay support, animated visual elements, synchronized looping music, fade-in audio layers, and dynamic bite sound effects based on the current position of the music loop.
+This project started as a classic Snake game and gradually became a more complete portfolio project with a custom menu system, difficulty selection, level progression, a three-life system, collision recovery logic, synchronised music layers, dynamic bite sound effects, and Windows executable support.
 
 ---
 
 ## Project Overview
 
-**Snake by Mils3x3** is a custom Snake game written in Python. The game uses Python Turtle for the main graphics, Tkinter for the start and replay windows, and Pygame for music and sound effects.
+**Snake by Mils3x3** is a custom Snake game written in Python.
 
-The main goal of this project was to practise and demonstrate:
+The game uses:
 
-- modular Python project structure
-- object-oriented game elements
-- keyboard control handling
-- collision detection
-- score and level management
-- audio playback with Pygame
-- synchronised looping music layers
-- dynamic sound effects linked to gameplay timing
-- preparing a Python game for portfolio and executable release
+- **Python Turtle** for the main game graphics
+- **CustomTkinter / Tkinter** for embedded menu interfaces
+- **Pygame Mixer** for music and sound effects
+
+The main goal of this project is to demonstrate practical Python programming skills through a complete playable game, including modular code structure, object-oriented game components, event handling, collision logic, audio timing, resource handling, and portfolio-ready project organisation.
 
 ---
 
-## Features
+## Key Features
 
 - Classic Snake gameplay built with Python Turtle
-- Modular code structure split across multiple Python files
-- Start window and replay window using Tkinter
-- Score display and level display
-- Animated countdown before the game starts
-- Animated border drawing
-- Keyboard control with queued direction changes
+- Modular Python project structure split across multiple files
+- Embedded CustomTkinter menus inside the Turtle game window
+- Main menu with Play, Language, and Exit options
+- Multilingual interface support:
+  - English
+  - Hungarian
+  - Persian / Farsi
+- Difficulty selection with seven named difficulty levels
+- Centralised text management in `language.py`
+- Centralised colour palette in `colors.py`
+- Centralised font settings in `fonts.py`
+- Score, level, and lives display
+- Three-life system
+- Smart collision recovery after losing a life
+- Safe-direction detection after wall or self-collision
+- Automatic game over if no safe direction is available
 - Border collision detection
 - Self-collision detection
 - Random apple placement with checks to avoid the snake body and head
+- Keyboard control with queued direction changes
+- Animated border drawing
+- Rhythmic countdown sequence before gameplay starts
+- Apple appears only when the game actually begins
 - Increasing speed as the player reaches higher levels
 - Pygame-based sound and music system
-- Multiple background music tracks running in synchronised loops
+- Multiple synchronised looping background music tracks
 - Fade-in music layers as the player reaches new levels
-- Different apple bite sounds depending on the current music loop position
+- Dynamic apple bite sounds based on the current music loop position
 - Random game-over sounds
 - Replay support after game over
 - Resource path handling for normal Python runs and PyInstaller builds
+- Clean exit handling for the Windows executable version
 
 ---
 
@@ -69,11 +80,19 @@ snake-by-mils3x3/
 ├── .gitignore
 │
 ├── main.py
+├── app_helpers.py
+├── game_helpers.py
+│
 ├── apple.py
 ├── border.py
+├── colors.py
 ├── control.py
 ├── countdown.py
+├── difficulty.py
+├── fonts.py
+├── language.py
 ├── level.py
+├── lives.py
 ├── score.py
 ├── settings.py
 ├── snake.py
@@ -107,16 +126,23 @@ snake-by-mils3x3/
 
 | File | Purpose |
 | --- | --- |
-| `main.py` | Main game loop, gameplay flow, collision checks, scoring, levels, replay logic |
+| `main.py` | Main gameplay flow, object creation, main game loop, level progression, replay flow |
+| `app_helpers.py` | Main menu handling and application exit helper |
+| `game_helpers.py` | Snake position saving, safe-direction checks, and collision recovery helpers |
 | `snake.py` | Snake body creation and new segment handling |
 | `apple.py` | Random apple placement |
 | `control.py` | Keyboard direction control and queued turn logic |
 | `score.py` | Score display |
-| `level.py` | Level display and level flash effect |
-| `countdown.py` | Animated countdown before the game starts |
-| `border.py` | Animated border drawing |
-| `sound.py` | Music loading, sound effects, fade-in logic, game-over audio, resource paths |
-| `window.py` | Tkinter start and replay windows |
+| `level.py` | Level display and level flash effects |
+| `lives.py` | Lives display and crash / safe-direction message handling |
+| `countdown.py` | Rhythmic countdown display before gameplay starts |
+| `border.py` | Animated border drawing, synchronised with music start |
+| `difficulty.py` | Difficulty selection menu and speed settings |
+| `language.py` | Multilingual text system |
+| `colors.py` | Centralised colour palette |
+| `fonts.py` | Centralised font settings |
+| `sound.py` | Music loading, sound effects, fade-in logic, game-over audio, and resource paths |
+| `window.py` | Embedded CustomTkinter menus inside the Turtle canvas |
 | `settings.py` | Basic game settings such as board size, movement distance, and speed multiplier |
 
 ---
@@ -125,10 +151,11 @@ snake-by-mils3x3/
 
 - Python 3.11+
 - Pygame
+- CustomTkinter
 
-Python Turtle and Tkinter are included with the standard Python installation on most systems.
+Python Turtle and Tkinter are included with the standard Python installation on most Windows Python installations.
 
-Install the external dependency:
+Install the external dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -137,7 +164,8 @@ pip install -r requirements.txt
 Example `requirements.txt`:
 
 ```txt
-pygame
+pygame>=2.6.0
+customtkinter>=5.2.0
 ```
 
 ---
@@ -169,7 +197,7 @@ python main.py
 
 A Windows executable version may be provided under the **GitHub Releases** section.
 
-The executable was built from the Python source code using PyInstaller.
+The executable can be built from the Python source code using PyInstaller.
 
 > Note: The Windows executable is not digitally signed. Windows SmartScreen or antivirus software may show a warning for unsigned Python executables, even when the file is safe.
 
@@ -177,9 +205,9 @@ The executable was built from the Python source code using PyInstaller.
 
 ## Audio System
 
-The project uses Pygame Mixer for music and sound effects.
+The project uses **Pygame Mixer** for music and sound effects.
 
-The background music system starts multiple looped music tracks at the same time and keeps them synchronised. Most tracks start with volume set to zero, then fade in when the player reaches specific score ranges and levels.
+The background music system starts multiple looped music tracks at the same time and keeps them synchronised. Most tracks start with their volume set to zero and fade in when the player reaches specific score ranges and levels.
 
 The apple bite sound system checks the current position of the music loop and selects a different bite sound depending on where the music is within the loop. This creates a more rhythmic and dynamic sound effect system instead of playing the same sound every time.
 
@@ -187,11 +215,13 @@ The apple bite sound system checks the current position of the music loop and se
 
 ## Audio and Assets
 
-The music tracks and apple bite sound effects were created by **Milan Olah** for this project.
+The background music tracks and apple bite sound effects were created by **Milan Olah / Mils3x3** for this project.
 
-The game-over sounds use meme-style audio sourced from YouTube and are treated as third-party audio. They are included only as part of this personal portfolio/demo project and are not claimed as original work.
+The game-over sounds use third-party / meme-style audio clips sourced from YouTube-style internet meme sounds. They are included only as part of this personal portfolio/demo project and are not claimed as original work.
 
-Audio and media assets included in this repository are not licensed for reuse, redistribution, modification, or commercial use without permission from the relevant rights holders.
+Anyone who wants to reuse or adapt this project should replace those third-party / meme-style audio files with their own licensed or original sound effects.
+
+Audio, icons, and other media assets included in this repository are not licensed for reuse, redistribution, modification, or commercial use without permission from the relevant rights holders.
 
 ---
 
@@ -199,7 +229,7 @@ Audio and media assets included in this repository are not licensed for reuse, r
 
 ![Snake by Mils3x3 gameplay demo](screenshots/snake-game-demo.gif)
 
-Make sure the screenshot file is stored in the repository at:
+Make sure the screenshot or GIF file is stored in the repository at:
 
 ```text
 screenshots/snake-game-demo.gif
@@ -213,24 +243,27 @@ This project is considered complete as a portfolio version.
 
 Possible future improvements:
 
-- replacing third-party meme sounds with fully original game-over sounds
-- adding a menu for difficulty selection
+- replacing third-party meme-style game-over sounds with fully original sound effects
 - adding high-score saving
 - adding a pause option
+- adding a settings menu
+- adding more visual themes
 - refactoring the game into a dedicated `Game` class
-- creating a more advanced installer for Windows
+- creating a more advanced Windows installer
 
 ---
 
 ## Author
 
-**Milan Olah**  
+**Milan Olah / Mils3x3**  
 GitHub: `@mils3x3`
 
 ---
 
 ## Copyright
 
-Copyright © 2026 Milan Olah. All rights reserved.
+Copyright © 2026 Milan Olah / Mils3x3. All rights reserved.
 
-This repository is provided as a personal portfolio project. The source code may be viewed for educational and portfolio review purposes. Audio and media assets are not licensed for reuse unless explicitly stated.
+This repository is provided as a personal programming portfolio project. The source code may be viewed for educational, portfolio review, and recruitment purposes. Audio and media assets are not licensed for reuse unless explicitly stated.
+
+See [`COPYRIGHT.md`](COPYRIGHT.md) for more details.
